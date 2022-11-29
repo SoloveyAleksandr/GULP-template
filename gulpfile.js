@@ -15,6 +15,9 @@ const imagemin = require("gulp-imagemin");
 const del = require("del");
 const browserSync = require("browser-sync").create();
 
+const ts = require("gulp-typescript");
+const tsProject = ts.createProject("tsconfig.json");
+
 /* Paths */
 const srcPath = "src/";
 const distPath = "dist/";
@@ -28,7 +31,7 @@ const path = {
   },
   src: {
     html: srcPath + "*.html",
-    js: srcPath + "assets/js/*.js",
+    js: srcPath + "assets/js/*.{js,ts}",
     css: srcPath + "assets/scss/*.scss",
     images:
       srcPath +
@@ -37,7 +40,7 @@ const path = {
   },
   watch: {
     html: srcPath + "**/*.html",
-    js: srcPath + "assets/js/**/*.js",
+    js: srcPath + "assets/js/**/*.{js,ts}",
     css: srcPath + "assets/scss/**/*.scss",
     images:
       srcPath +
@@ -72,8 +75,6 @@ function html(cb) {
     )
     .pipe(dest(path.build.html))
     .pipe(browserSync.reload({ stream: true }));
-
-  cb();
 }
 
 function css(cb) {
@@ -107,45 +108,15 @@ function css(cb) {
     )
     .pipe(dest(path.build.css))
     .pipe(browserSync.reload({ stream: true }));
-
-  cb();
-}
-
-function cssWatch(cb) {
-  return src(path.src.css, { base: srcPath + "assets/scss/" })
-    .pipe(
-      sass({
-        includePaths: "./node_modules/",
-      })
-    )
-    .pipe(
-      rename({
-        suffix: ".min",
-        extname: ".css",
-      })
-    )
-    .pipe(dest(path.build.css))
-    .pipe(browserSync.reload({ stream: true }));
-
-  cb();
 }
 
 function js(cb) {
   return src(path.src.js, { base: srcPath + "assets/js/" })
+    .pipe(tsProject())
+    .js
     .pipe(rigger())
     .pipe(dest(path.build.js))
     .pipe(browserSync.reload({ stream: true }));
-
-  cb();
-}
-
-function jsWatch(cb) {
-  return src(path.src.js, { base: srcPath + "assets/js/" })
-    .pipe(rigger())
-    .pipe(dest(path.build.js))
-    .pipe(browserSync.reload({ stream: true }));
-
-  cb();
 }
 
 function images(cb) {
@@ -162,49 +133,26 @@ function images(cb) {
     )
     .pipe(dest(path.build.images))
     .pipe(browserSync.reload({ stream: true }));
-
-  cb();
-}
-
-function imagesWatch(cb) {
-  return src(path.src.images)
-    .pipe(dest(path.build.images))
-    .pipe(browserSync.reload({ stream: true }));
-
-  cb();
 }
 
 function fonts(cb) {
   return src(path.src.fonts)
     .pipe(dest(path.build.fonts))
     .pipe(browserSync.reload({ stream: true }));
-
-  cb();
 }
 
 function clean(cb) {
   return del(path.clean);
-
-  cb();
-}
-
-function cleanWithoutImg(cb) {
-  return del([`!dist/**/images/**`, 'dist/**/fonts/**', 'dist/**/css/**', 'dist/**/js/**', 'dist/index.html'])
 }
 
 function watchFiles() {
   gulp.watch([path.watch.html], html);
-  gulp.watch([path.watch.css], cssWatch);
-  gulp.watch([path.watch.js], jsWatch);
-  // gulp.watch([path.watch.images], imagesWatch);
+  gulp.watch([path.watch.css], css);
+  gulp.watch([path.watch.js], js);
   gulp.watch([path.watch.images], images);
   gulp.watch([path.watch.fonts], fonts);
 }
 
-const buildOld = gulp.series(clean, gulp.parallel(html, css, js, images, fonts));
-const start = gulp.series(cleanWithoutImg, gulp.parallel(html, css, js, fonts));
-const watch = gulp.parallel(start, watchFiles, serve);
-const build = gulp.parallel(buildOld, watchFiles, serve);
 const serverStart = gulp.series(clean, html, css, js, images, fonts, gulp.parallel(watchFiles, serve));
 
 /* Exports Tasks */
@@ -214,9 +162,4 @@ exports.js = js;
 exports.images = images;
 exports.fonts = fonts;
 exports.clean = clean;
-exports.build = build;
-exports.watch = watch;
-// exports.default = watch;
 exports.default = serverStart;
-exports.cleanWithoutImg = cleanWithoutImg
-exports.start = start

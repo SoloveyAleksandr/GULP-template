@@ -16,9 +16,11 @@
     "gulp-rigger": "^0.5.8",
     "gulp-sass": "^5.0.0",
     "gulp-strip-css-comments": "^2.0.0",
+    "gulp-typescript": "^6.0.0-alpha.1",
     "panini": "^1.7.1",
     "rigger": "^1.0.1",
-    "sass": "^1.43.5"
+    "sass": "^1.43.5",
+    "typescript": "^4.9.3"
   },
   "browserslist": [
     "last 1 version",
