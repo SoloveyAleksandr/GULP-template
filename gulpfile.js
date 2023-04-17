@@ -14,6 +14,7 @@ const panini = require("panini");
 const imagemin = require("gulp-imagemin");
 const del = require("del");
 const browserSync = require("browser-sync").create();
+const babel = require('gulp-babel');
 
 /* Paths */
 const srcPath = "src/";
@@ -135,13 +136,9 @@ function cssWatch() {
 function js() {
   return src(path.src.js, { base: srcPath + "assets/js/" })
     .pipe(rigger())
-    .pipe(dest(path.build.js))
-    .pipe(browserSync.reload({ stream: true }));
-}
-
-function jsWatch() {
-  return src(path.src.js, { base: srcPath + "assets/js/" })
-    .pipe(rigger())
+    .pipe(babel({
+      presets: ['@babel/env']
+    }))
     .pipe(dest(path.build.js))
     .pipe(browserSync.reload({ stream: true }));
 }
@@ -191,7 +188,7 @@ function cleanWithoutImg() {
 function watchFiles() {
   gulp.watch([path.watch.html], html);
   gulp.watch([path.watch.css], cssWatch);
-  gulp.watch([path.watch.js], jsWatch);
+  gulp.watch([path.watch.js], js);
   gulp.watch([path.watch.images], images);
   gulp.watch([path.watch.video], video);
   gulp.watch([path.watch.fonts], fonts);
@@ -200,7 +197,7 @@ function watchFiles() {
 function watchFilesDev() {
   gulp.watch([path.watch.html], html);
   gulp.watch([path.watch.css], cssWatch);
-  gulp.watch([path.watch.js], jsWatch);
+  gulp.watch([path.watch.js], js);
   gulp.watch([path.watch.images], imagesWithoutMin);
   gulp.watch([path.watch.video], video);
   gulp.watch([path.watch.fonts], fonts);
