@@ -187,7 +187,7 @@ function cleanWithoutImg() {
 
 function watchFiles() {
   gulp.watch([path.watch.html], html);
-  gulp.watch([path.watch.css], cssWatch);
+  gulp.watch([path.watch.css], css);
   gulp.watch([path.watch.js], js);
   gulp.watch([path.watch.images], images);
   gulp.watch([path.watch.video], video);
@@ -196,7 +196,7 @@ function watchFiles() {
 
 function watchFilesDev() {
   gulp.watch([path.watch.html], html);
-  gulp.watch([path.watch.css], cssWatch);
+  gulp.watch([path.watch.css], css);
   gulp.watch([path.watch.js], js);
   gulp.watch([path.watch.images], imagesWithoutMin);
   gulp.watch([path.watch.video], video);
