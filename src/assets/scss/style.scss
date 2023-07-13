@@ -9,29 +9,9 @@ html {
   box-sizing: border-box;
   font-size: calc(100vw / 1920 * 10);
 
-  @include breakpoint($cos-bp) {
-    font-size: calc(100vw / 1330 * 10);
-  }
-
-  @include breakpoint($xl-bp) {
-    font-size: calc(100vw / 1024 * 10);
-  }
-
-  @include breakpoint($jb-bp) {
-    font-size: calc(100vw / 850 * 10);
-  }
-
-  @include breakpoint($lb-bp) {
-    font-size: calc(100vw / 650 * 10);
-  }
-
-  @include breakpoint($sm-bp) {
-    font-size: calc(100vw / 500 * 10);
-  }
-
-  @include breakpoint($xs-bp) {
-    font-size: calc(100vw / 375 * 10);
-  }
+  // @include breakpoint($cos-bp) {
+  //   font-size: calc(100vw / 1330 * 10);
+  // }
 }
 
 *,
@@ -48,3 +28,9 @@ img {
 svg {
   transition: all 0.1s linear;
 }
+
+@import "./blocks/controls";
+
+@import "./blocks/greeting";
+
+@import "./blocks/main";

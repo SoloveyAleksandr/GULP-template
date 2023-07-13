@@ -1,0 +1,17 @@
+.greeting {
+  padding: 10rem 5rem;
+  min-height: 100vh;
+
+  &__title {
+    font-size: 10rem;
+    font-weight: 700;
+    margin-bottom: 4rem;
+    min-height: 1.2em;
+  }
+
+  &__text {
+    font-size: 4rem;
+    font-weight: 500;
+    max-width: 60rem;
+  }
+}

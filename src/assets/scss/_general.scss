@@ -1,1 +1,49 @@
 @import "./vars";
+
+html,
+body {
+  font-family: "Jost", sans-serif;
+  font-size: 2rem;
+  font-weight: 400;
+  line-height: 1.2;
+  color: $dark;
+}
+
+#scene {
+  position: fixed;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.page {
+  position: relative;
+  z-index: 2;
+  min-height: 100vh;
+  overflow: auto;
+}
+
+[data-cursor] {
+  &._hide-cursor {
+    &::after {
+      display: none;
+    }
+  }
+
+  &::after {
+    content: "|";
+    display: inline-block;
+    animation: cursorAnim 0.8s linear 0.5s infinite;
+  }
+}
+
+@keyframes cursorAnim {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
