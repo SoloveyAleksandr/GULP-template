@@ -9,6 +9,12 @@ body {
   color: $dark;
 }
 
+body {
+  &._hidden {
+    overflow: hidden;
+  }
+}
+
 #scene {
   position: fixed;
   z-index: -1;
@@ -22,7 +28,12 @@ body {
   position: relative;
   z-index: 2;
   min-height: 100vh;
-  overflow: auto;
+}
+
+.container {
+  padding: 0rem 5rem;
+  margin: 0 auto;
+  width: 100%;
 }
 
 [data-cursor] {
@@ -46,4 +57,12 @@ body {
   100% {
     opacity: 0;
   }
+}
+
+.section-title {
+  font-size: 10rem;
+  font-weight: 700;
+  margin-bottom: 4rem;
+  min-height: 1.2em;
+  text-transform: uppercase;
 }

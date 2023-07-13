@@ -10,17 +10,22 @@ import { TransformControls } from 'three/addons/controls/TransformControls.js';
 import { TrackballControls } from 'three/addons/controls/TrackballControls.js';
 
 document.addEventListener("DOMContentLoaded", () => {
+  window.scrollTo({
+    top: 0,
+  });
+
+  // document.body.classList.add("_hidden");
 
   const windowSize = {
     width: window.innerWidth,
     height: window.innerHeight,
   }
 
-  let canvas, scene, camera, renderer;
+  let canvas, scene, camera, cameraWrapper, renderer;
   let loader, clock;
   let transformControl, orbitControl;
 
-  let ambientLight, dirLight;
+  let ambientLight, dirLight, spotLight;
 
   let avatar, skeleton, mixer;
   let avatarActions = {};
@@ -44,7 +49,6 @@ document.addEventListener("DOMContentLoaded", () => {
   if (tableAnimBtn) {
     tableAnimBtn.addEventListener('click', () => {
       if (tableTL.finished) {
-        // console.log(tableTL.finished);
         tableTL.reverse();
       } else {
         tableTL.play();
@@ -55,6 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
   init();
 
   function init() {
+
     canvas = document.getElementById("scene");
     canvas.width = windowSize.width;
     canvas.height = windowSize.height;
@@ -62,6 +67,9 @@ document.addEventListener("DOMContentLoaded", () => {
     scene = new THREE.Scene();
 
     camera = new THREE.PerspectiveCamera(35, windowSize.width / windowSize.height, 1, 500);
+    cameraWrapper = new THREE.Group();
+    cameraWrapper.add(camera);
+    scene.add(cameraWrapper);
 
     renderer = new THREE.WebGLRenderer({
       canvas: canvas,
@@ -82,9 +90,14 @@ document.addEventListener("DOMContentLoaded", () => {
     // глобальный свет
     ambientLight = new THREE.AmbientLight("#ffffff");
     scene.add(ambientLight);
+
     // направленый свет
     dirLight = new THREE.DirectionalLight("#ffffff", 0.5);
     dirLight.position.set(2, 2, -2);
+    dirLight.castShadow = true;
+    scene.add(dirLight);
+
+    spotLight = new THREE.SpotLight("#b93a3a");
     dirLight.castShadow = true;
     scene.add(dirLight);
 
@@ -101,6 +114,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     camera.position.set(-0.32455703955060344, 4.868967116532931, 4.3476857990988895);
     camera.rotation.set(-0.7623217702189572, 0.20440336509283258, 0.1914505610470401);
+    // cameraWrapper.position.set(-0.32455703955060344, 4.868967116532931, 4.3476857990988895);
+    // cameraWrapper.rotation.set(-0.7623217702189572, 0.20440336509283258, 0.1914505610470401);
 
     // Управление объектом
     // transformControl = new TransformControls(camera, renderer.domElement);
@@ -261,14 +276,6 @@ document.addEventListener("DOMContentLoaded", () => {
       .play()
   }
 
-  function showTable() {
-
-  }
-
-  function hideTable() {
-
-  }
-
   // Animation render loop
   function animate() {
     requestAnimationFrame(animate);
@@ -299,7 +306,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const greetingText = document.querySelector(".greeting__text");
 
     const mainTL = gsap.timeline({
-    })
+      onComplete: () => {
+        document.body.classList.remove("_hidden");
+      }
+    });
 
     // Выход аватара 
     const avatarTL = gsap.timeline({
@@ -370,5 +380,57 @@ document.addEventListener("DOMContentLoaded", () => {
 
     mainTL.add(textTL);
   }
+
+  const about = document.querySelector(".about");
+
+  const aboutTL = gsap.timeline({
+    scrollTrigger: {
+      trigger: about,
+      start: "top bottom",
+      end: "bottom bottom",
+      markers: true,
+      scrub: 1,
+      onUpdate: (e) => {
+        if (e.direction > 0) {
+          gsap.to(avatar.rotation, {
+            y: 0,
+          })
+        } else {
+          gsap.to(avatar.rotation, {
+            y: -Math.PI,
+          })
+        }
+      },
+      onEnter: () => {
+        fadeToAction("walking_2", 1);;
+      },
+      onLeave: () => {
+        fadeToAction("idle", 1);;
+      },
+      onEnterBack: () => {
+        fadeToAction("walking_2", 1)
+      },
+      onLeaveBack: () => {
+        fadeToAction("idle", 1);
+        gsap.to(avatar.rotation, {
+          y: 0,
+        });
+      },
+    },
+  });
+
+  window.ambientLight = ambientLight;
+  aboutTL.to(ambientLight, {
+    intensity: 0,
+  }, "sin").timeScale(3);
+
+  aboutTL.to(cameraWrapper.position, {
+    x: -1.5,
+    y: 1,
+    z: 3,
+  }, "sin");
+  aboutTL.to(cameraWrapper.rotation, {
+    y: -1.8,
+  }, "sin");
 
 });
