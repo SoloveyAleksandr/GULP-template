@@ -36,7 +36,7 @@ const path = {
     images:
       srcPath +
       "assets/images/**/*.{jpg,png,svg,gif,ico,webp,webmanifest,xml,json}",
-    fonts: srcPath + "assets/fonts/**/*.{eot,woff,woff2,ttf,svg}",
+    fonts: srcPath + "assets/fonts/**/*.{eot,woff,woff2,ttf,svg,json}",
     video: srcPath + "assets/video/**/*.*",
     models: srcPath + "assets/models/**/*.*",
   },
@@ -48,7 +48,7 @@ const path = {
       srcPath +
       "assets/images/**/*.{jpg,png,svg,gif,ico,webp,webmanifest,xml,json}",
     video: srcPath + "assets/video/**/*.*",
-    fonts: srcPath + "assets/fonts/**/*.{eot,woff,woff2,ttf,svg}",
+    fonts: srcPath + "assets/fonts/**/*.{eot,woff,woff2,ttf,svg,json}",
     models: srcPath + "assets/models/**/*.*",
   },
   clean: "./" + distPath,

@@ -29,6 +29,8 @@ svg {
   transition: all 0.1s linear;
 }
 
+@import "./blocks/spinner";
+
 @import "./blocks/controls";
 
 @import "./blocks/greeting";

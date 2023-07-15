@@ -10,6 +10,17 @@ body {
 }
 
 body {
+  &::-webkit-scrollbar {
+    width: 0.5rem;
+  }
+  &::-webkit-scrollbar-track {
+    background: rgb(102, 102, 102);
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: rgb(231, 231, 231);
+    border-radius: 0.5rem;
+  }
+
   &._hidden {
     overflow: hidden;
   }
@@ -62,7 +73,6 @@ body {
 .section-title {
   font-size: 10rem;
   font-weight: 700;
-  margin-bottom: 4rem;
   min-height: 1.2em;
   text-transform: uppercase;
 }

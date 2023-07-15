@@ -7,11 +7,13 @@
     font-weight: 700;
     margin-bottom: 4rem;
     min-height: 1.2em;
+    color: $white;
   }
 
   &__text {
     font-size: 4rem;
     font-weight: 500;
     max-width: 60rem;
+    color: $white;
   }
 }
