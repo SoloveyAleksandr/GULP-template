@@ -200,6 +200,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // loadChair();
   loadBackground();
   // loadCurtain();
+  loadStack();
 
   function start() {
     // Занавес
@@ -369,7 +370,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     })
       .to(cameraWrapper.rotation, {
-        y: -1.5,
+        y: -1.8,
         duration: 2,
       }, "sin")
       .to(cameraWrapper.position, {
@@ -616,57 +617,95 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function loadStack() {
     stack = new THREE.Group();
+    scene.add(stack);
+    stack.position.x = 5;
+    stack.rotation.y = -Math.PI / 2;
+
+    const textMat = new THREE.MeshPhongMaterial({
+      color: "#cccccc",
+      emissive: "#000000",
+      specular: "#ffffff",
+    });
 
     fontLoader.load("/assets/fonts/Tektur ExtraBold_Regular.json", function (font) {
-      const group = new THREE.Group();
+      {
+        const group = new THREE.Group();
+        group.position.z = -5;
 
-      const textGeo = createTextGeo(font,)
-      textGeo.computeBoundingBox();
-      textGeo.computeVertexNormals();
+        const textGeo = createTextGeo(font, "HTML", 3, 0.4);
+        textGeo.computeBoundingBox();
+        textGeo.computeVertexNormals();
 
-      const textWidth = textGeo.boundingBox.max.x - textGeo.boundingBox.min.x;
+        const textWidth = textGeo.boundingBox.max.x - textGeo.boundingBox.min.x;
 
-      const textMat = new THREE.MeshPhongMaterial({
-        color: "#cccccc",
-        emissive: "#000000",
-        specular: "#ffffff",
-      });
+        const front = new THREE.Mesh(
+          textGeo,
+          textMat,
+        );
+        front.traverse(function (child) { child.castShadow = true; });
+        front.position.set(-textWidth / 2, 0, 0);
 
-      const front = new THREE.Mesh(
-        textGeo,
-        new THREE.MeshPhongMaterial({
-          color: "#cccccc",
-          emissive: "#000000",
-          specular: "#ffffff",
-        })
-      );
-      front.traverse(function (child) { child.castShadow = true; });
-      front.position.set(0, 0, -2);
+        const light = new THREE.SpotLight("#ff0000");
+        const lightTarget = new THREE.Object3D();
+        lightTarget.position.x = front.position.x + textWidth / 2;
+        lightTarget.position.z = front.position.z - 2;
 
-      group.position.x = -textWidth / 2;
-      group.position.z = -5;
-      group.add(front);
+        light.position.x = front.position.x + textWidth / 2;
+        light.position.y = textGeo.boundingBox.max.y + 1;
+        light.position.z = front.position.z + 2;
+        light.intensity = 10;
+        light.angle = 1;
+        light.penumbra = 0.2;
+        light.distance = 20;
+        light.castShadow = true;
+        light.target = lightTarget;
 
-      const light = new THREE.SpotLight("#e4ffe4");
-      const lightTarget = new THREE.Object3D();
-      lightTarget.position.x = model.position.x;
-      lightTarget.position.y = textGeo.boundingBox.max.y / 3;
-      lightTarget.position.z = front.position.z;
+        group.add(light.target);
+        group.add(light);
+        group.add(front);
 
-      light.position.y = 0.1;
-      light.position.x = model.position.x;
-      light.position.z = -0.1;
-      light.intensity = 0.3;
-      light.angle = 0.7;
-      light.penumbra = 0.2;
-      light.distance = 4;
-      light.castShadow = false;
-      light.target = lightTarget;
-      group.add(light.target);
-      group.add(light);
-      group.add(model);
+        stack.add(group);
+      }
 
-      background.add(group);
+      {
+        const group = new THREE.Group();
+        group.position.z = -2;
+        group.position.x = 1;
+
+        const textGeo = createTextGeo(font, "CSS", 2, 0.4);
+        textGeo.computeBoundingBox();
+        textGeo.computeVertexNormals();
+
+        const textWidth = textGeo.boundingBox.max.x - textGeo.boundingBox.min.x;
+
+        const front = new THREE.Mesh(
+          textGeo,
+          textMat,
+        );
+        front.traverse(function (child) { child.castShadow = true; });
+        front.position.set(-textWidth / 2, 0, 0);
+
+        const light = new THREE.SpotLight("#09ff00");
+        const lightTarget = new THREE.Object3D();
+        lightTarget.position.x = front.position.x + textWidth / 2;
+        lightTarget.position.z = front.position.z - 2;
+
+        light.position.x = front.position.x + textWidth / 2;
+        light.position.y = textGeo.boundingBox.max.y + 1;
+        light.position.z = front.position.z + 2;
+        light.intensity = 1;
+        light.angle = 0.6;
+        light.penumbra = 0.2;
+        light.distance = 5;
+        light.castShadow = true;
+        light.target = lightTarget;
+
+        group.add(light.target);
+        group.add(light);
+        group.add(front);
+
+        stack.add(group);
+      }
     });
   }
 
