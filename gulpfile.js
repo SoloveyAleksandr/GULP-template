@@ -31,7 +31,7 @@ const path = {
   },
   src: {
     html: srcPath + "*.html",
-    js: srcPath + "assets/js/*.js",
+    js: srcPath + "assets/js/*.{js,map}",
     css: srcPath + "assets/scss/*.scss",
     images:
       srcPath +
@@ -42,7 +42,7 @@ const path = {
   },
   watch: {
     html: srcPath + "**/*.html",
-    js: srcPath + "assets/js/**/*.js",
+    js: srcPath + "assets/js/**/*.{js,map}",
     css: srcPath + "assets/scss/**/*.scss",
     images:
       srcPath +
