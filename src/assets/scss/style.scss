@@ -26,14 +26,6 @@ img {
 }
 
 svg {
-  transition: all 0.1s linear;
+  transition: all 0.3s linear;
 }
 
-@import "./blocks/spinner";
-
-@import "./blocks/controls";
-
-@import "./blocks/greeting";
-@import "./blocks/about";
-
-@import "./blocks/main";
